@@ -21,4 +21,17 @@
 复赛分数：2.62
 
 ### 方案设计
-采用convnext作为backbone，尝试过使用efficientnet，swin-v2(base)，和convnext(base)，convnext的分数是最高的。
+篡改和没篡改过的图像分别划分20%作为验证集，如果按照官方的计分方式，每一轮验证的时间比较长，所以我在挑选模型的时候是按照在篡改验证集上iou分数来进行挑选的（阈值设为0.5）。后面发现其实仔细研究一下官方计算分数的方法非常重要！！！！！！
+
+#### backbone的选择
+采用convnext作为encoder，尝试过使用efficientnet，swin-v2(base)，和convnext(base)，convnext的分数是最高的。Decoder使用了UNet结构，尝试过UperNet，UNet，UNetPlusPlus，UperNet效果比较差，考虑到篡改检测需要比较浅层的纹理信息，而UNet和UNetPlusPlus的效果差不多，就用了UNet。个人感觉Decoder差不多就行了，encoder强才是真的强。
+当把所有的图像都resize成512进行训练和推理时，三个不同的backbone分数是：
+- efficientnet：线下iou：0.1290，线上分数：0.9620
+- swin-v2：线下iou：0.1374，线上分数：1.2087
+- convnext：线下iou：0.1723，线上分数：1.5737
+使用convnext-large或者xlarge分数还是会再往上升的，但是显卡不够，训练效率太低了，所以没有采用
+#### 损失函数
+损失函数没有做特别的调整，就是ce loss + dice loss，权重的影响也不是特别大，凭感觉设的。
+#### 上分策略
+1. 
+使用convnext-large或者xlarge分数还是会再往上升的，但是显卡不够，
