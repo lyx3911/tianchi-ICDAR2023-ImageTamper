@@ -6,12 +6,9 @@ import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
 
-# from models.vision_transformer import SwinUnet
-# import segmentation_models_pytorch as smp
-from models.SwinUperNet import UperNet_swin, unet_swin, unetplusplus_swin
 from models.convnext import unet_convnext
 
-from config import get_config
+# from config import get_config
 
 import torch.optim as optim
 
@@ -50,7 +47,6 @@ parser.add_argument('--img_size', type=int,
                     default=224, help='input patch size of network input')
 parser.add_argument('--seed', type=int,
                     default=42, help='random seed')
-parser.add_argument('--cfg', type=str, required=True, metavar="FILE", help='path to config file', )
 parser.add_argument(
         "--opts",
         help="Modify config options by adding 'KEY VALUE' pairs. ",
@@ -73,9 +69,6 @@ parser.add_argument('--eval', action='store_true', help='Perform evaluation only
 parser.add_argument('--throughput', action='store_true', help='Test throughput only')
 
 args = parser.parse_args()
-# if args.dataset == "Synapse":
-#     args.root_path = os.path.join(args.root_path, "train_npz")
-config = get_config(args)
 
 
 if __name__ == "__main__":
@@ -95,7 +88,6 @@ if __name__ == "__main__":
     if args.batch_size != 24 and args.batch_size % 6 == 0:
         args.base_lr *= args.batch_size / 24
     
-    print(config)
 
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
